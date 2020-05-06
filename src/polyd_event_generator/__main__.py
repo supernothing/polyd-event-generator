@@ -4,6 +4,8 @@ import logging
 import queue
 import signal
 import threading
+import sys
+import os
 
 import click
 import inflection
@@ -47,6 +49,8 @@ class WSThread(AsyncThread):
                             self.q.put(events.Event.from_event(self.community, json.loads(await
                                    asyncio.wait_for(websocket.recv(), 1))))
                         except asyncio.TimeoutError:
+                            if self.stop_thread:
+                                break
                             continue
                         except Exception as e:
                             logger.exception(e)
@@ -54,8 +58,13 @@ class WSThread(AsyncThread):
             except Exception as e:
                 logger.exception(e)
 
-            if not self.retry or self.stop_thread:
+            if self.stop_thread:
                 break
+
+            if not self.retry:
+                logger.warning('Socket disconnected, exiting')
+                # for now, stop everything if we don't retry
+                os.kill(os.getpid(), signal.SIGINT)
 
             logger.warning('Socket disconnected, retrying in 1s...')
             await asyncio.sleep(1)
