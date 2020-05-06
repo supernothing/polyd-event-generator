@@ -11,5 +11,5 @@ jobs:
         name: supernothing/polyd-event-generator
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        dockerfile: dockerfile/Dockerfile
+        dockerfile: docker/Dockerfile
         snapshot: true
