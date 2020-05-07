@@ -91,7 +91,7 @@ def event_generator(event, community, redis, retry, quiet):
 
     # lazily create producers
     producers = {
-        f'polyd-{c}-all': producer.EventProducer(f'polyd-{c}-all', db) for c in communities
+        f'polyd-{c}-all': producer.EventProducer(f'polyd-{c}-all', db, max_len=20000) for c in communities
     }
 
     for t in ws_threads:
@@ -112,7 +112,7 @@ def event_generator(event, community, redis, retry, quiet):
             stream_name = f'polyd-{event.community}-{event.event}'
             community_stream = f'polyd-{event.community}-all'
             if stream_name not in producers:
-                producers[stream_name] = producer.EventProducer(stream_name, db)
+                producers[stream_name] = producer.EventProducer(stream_name, db, max_len=20000)
             producers[stream_name].add_event(event)
             producers[community_stream].add_event(event)
 
