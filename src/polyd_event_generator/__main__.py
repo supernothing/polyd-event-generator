@@ -8,11 +8,10 @@ import sys
 import os
 
 import click
-import inflection
 import websockets
 from walrus import Database
 
-from polyd_events import events, producer
+from polyd_events import events, producer, event_types
 
 
 logger = logging.getLogger(__name__)
@@ -75,10 +74,6 @@ polyd_communities = {
     'nu': 'wss://nu.k.polyswarm.network/v1/events/?chain=side',
     'lima': 'wss://lima.polyswarm.network/events?chain=side',
 }
-
-
-event_types = [inflection.underscore(cls.__name__) for cls in events.Event.__subclasses__()]
-
 
 @click.command()
 @click.option('-e', '--event', multiple=True, type=click.Choice(event_types+['all']), default=['all'])
