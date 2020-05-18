@@ -73,6 +73,7 @@ class WSThread(AsyncThread):
 polyd_communities = {
     'nu': 'wss://nu.k.polyswarm.network/v1/events/?chain=side',
     'omicron': 'wss://omicron.k.polyswarm.network/v1/events/?chain=side',
+    'rho': 'wss://rho.k.polyswarm.network/v1/events/?chain=side'
 }
 
 @click.command()
